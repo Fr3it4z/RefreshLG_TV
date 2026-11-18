@@ -1,4 +1,4 @@
-# lgdetox — menu próprio para televisores LG (webOS)
+# lgdetox — menu próprio para televisões LG (webOS)
 
 Um menu rápido e sem publicidade: grelha de aplicações navegável com o telecomando, relógio e
 atalhos para abrir as aplicações instaladas.
@@ -9,7 +9,7 @@ o ecrã inicial original da LG continua lá.
 ## Estrutura do projeto
 
 ```
-app/                  ← tudo o que vai para o televisor
+app/                  ← tudo o que vai para a televisão
   appinfo.json          manifesto da aplicação (id: com.lgdetox.menu, permissões)
   index.html            estrutura do ecrã
   style.css             aspeto visual (pensado para 1920x1080)
@@ -19,94 +19,105 @@ app/                  ← tudo o que vai para o televisor
   icon.png              ícone do menu (80x80)
   largeIcon.png         ícone grande do menu (130x130)
 scripts/
-  deploy.bat            empacota, instala e abre no televisor (Windows)
-  debug.bat             abre as DevTools ligadas à aplicação no televisor
+  deploy.sh             empacota, instala e abre na televisão
+  debug.sh              abre as DevTools ligadas à aplicação na televisão
 dist/                 ← pacote .ipk gerado (criado automaticamente)
 ```
 
 ## 1. Preparar o ambiente
 
-### No computador (Windows)
+### No computador (Linux)
 
-1. Instale o **Node.js LTS** (nodejs.org).
-2. Na PowerShell:
+1. Instale o **Node.js LTS**, pelo gestor de pacotes da distribuição ou pelo
+   [nvm](https://github.com/nvm-sh/nvm) (dispensa `sudo` no passo seguinte):
 
-   ```powershell
+   ```bash
+   # Opção A — Debian/Ubuntu
+   sudo apt install nodejs npm
+
+   # Opção B — nvm
+   nvm install --lts
+   ```
+
+2. No terminal:
+
+   ```bash
    # Instala as ferramentas de linha de comandos da LG (ares-*)
+   # (com o Node do apt é preciso sudo; com o nvm não)
    npm install -g @webos-tools/cli
 
    # Confirma que ficaram instaladas
    ares --version
    ```
 
-### No televisor
+### Na televisão
 
-1. Crie uma conta em **webostv.developer.lge.com** e inicie sessão com ela no televisor.
+1. Crie uma conta em **webostv.developer.lge.com** e inicie sessão com ela na televisão.
 2. Na LG Content Store, instale a aplicação **Developer Mode**.
-3. Abra-a, inicie sessão e ative **Dev Mode Status**. O televisor reinicia.
+3. Abra-a, inicie sessão e ative **Dev Mode Status**. A televisão reinicia.
 4. Volte a abrir o Developer Mode e ative **Key Server**.
 5. Tome nota do **IP** e da **Passphrase** que aparecem no ecrã.
 
 > ⚠️ **A sessão do Developer Mode expira.** O tempo restante aparece na aplicação Developer Mode.
-> Abra-a de vez em quando e carregue em **Extend**. Se a sessão expirar, o televisor **apaga as
+> Abra-a de vez em quando e carregue em **Extend**. Se a sessão expirar, a televisão **apaga as
 > aplicações de programador** (incluindo este menu) e é preciso instalá-lo de novo.
 
-### Ligar o computador ao televisor
+### Ligar o computador à televisão
 
-```powershell
-# Regista o televisor nas ferramentas ares.
+```bash
+# Regista a televisão nas ferramentas ares.
 # Escolha "add" e preencha:
-#   Nome: tv   |  IP: o do televisor  |  Porta: 9922
+#   Nome: tv   |  IP: o da televisão  |  Porta: 9922
 #   Utilizador: prisoner  |  Palavra-passe: deixar em branco
 ares-setup-device
 
-# Descarrega a chave SSH do televisor (o Key Server tem de estar ativo).
+# Descarrega a chave SSH da televisão (o Key Server tem de estar ativo).
 # Vai pedir a Passphrase que aparece no Developer Mode.
 ares-novacom --device tv --getkey
 
-# Teste: deve mostrar o modelo e a versão do webOS do televisor
+# Teste: deve mostrar o modelo e a versão do webOS da televisão
 ares-device --device tv --system-info
 ```
 
 ## 2. Testar no computador (opcional)
 
-Abra `app\index.html` no Chrome com a janela em 1920x1080 (ou use o modo de dispositivo das DevTools).
-Fora do televisor aparece a lista de `apps.config.js`. As setas e o Enter funcionam, mas as
-aplicações não abrem, porque os serviços do televisor não existem no computador.
+Abra `app/index.html` no Chrome ou Chromium com a janela em 1920x1080 (ou use o modo de dispositivo das DevTools).
+Fora da televisão aparece a lista de `apps.config.js`. As setas e o Enter funcionam, mas as
+aplicações não abrem, porque os serviços da televisão não existem no computador.
 
-## 3. Instalar e abrir no televisor
+## 3. Instalar e abrir na televisão
 
 Na pasta do projeto:
 
-```powershell
+```bash
 # Faz tudo de uma vez: empacota, instala e abre
-scripts\deploy.bat
+scripts/deploy.sh
 ```
 
 O que o script faz, passo a passo:
 
-```powershell
-# 1. Cria o pacote .ipk a partir da pasta app\
+```bash
+# 1. Cria o pacote .ipk a partir da pasta app/
 ares-package app -o dist
 
-# 2. Envia e instala o pacote no televisor
-ares-install --device tv dist\com.lgdetox.menu_1.0.0_all.ipk
+# 2. Envia e instala o pacote na televisão
+ares-install --device tv dist/com.lgdetox.menu_1.0.0_all.ipk
 
-# 3. Abre o menu no televisor
+# 3. Abre o menu na televisão
 ares-launch --device tv com.lgdetox.menu
 ```
 
 Outros comandos úteis:
 
-```powershell
-# Abre as DevTools do Chrome ligadas ao menu que está a correr no televisor
-scripts\debug.bat
+```bash
+# Abre as DevTools do Chrome ligadas ao menu que está a correr na televisão
+scripts/debug.sh
 
-# Desinstala o menu do televisor
+# Desinstala o menu da televisão
 ares-install --device tv --remove com.lgdetox.menu
 ```
 
-Sempre que alterar algum ficheiro em `app\`, volte a correr `scripts\deploy.bat`.
+Sempre que alterar algum ficheiro em `app/`, volte a correr `scripts/deploy.sh`.
 
 ## Teclas do telecomando
 
@@ -154,7 +165,7 @@ Para usar um ícone seu, coloque a imagem em `app/icons/` e aponte o campo `icon
 
 1. Tenta `luna://com.webos.applicationManager/listLaunchPoints`, que devolve todas as aplicações
    com ícones. Esta chamada **não está documentada** pela LG e pode ser recusada.
-2. Se for recusada, usa a lista de `apps.config.js` e pergunta ao televisor, através de
+2. Se for recusada, usa a lista de `apps.config.js` e pergunta à televisão, através de
    `getAppLoadStatus` (API oficial), quais delas estão instaladas.
 
 Para abrir as aplicações usa `luna://com.webos.applicationManager/launch` (API oficial).
@@ -164,7 +175,7 @@ partir do webOS TV 27.
 ### Testado numa 55NANO796NE (webOS 5, firmware 04.64.00)
 
 - `listLaunchPoints`, `listApps` e `getForegroundAppInfo` são **recusados** a aplicações de
-  programador. Por isso, neste televisor a grelha vem sempre de `apps.config.js`.
+  programador. Por isso, nesta televisão a grelha vem sempre de `apps.config.js`.
 - O menu não consegue ler ficheiros nem ícones de outras aplicações; daí os ícones próprios.
 - `getAppLoadStatus` e `launch` funcionam.
 - O HBO Max está instalado com dois identificadores: `com.wbd.stream` (a aplicação atual, usada
