@@ -1,0 +1,99 @@
+/* Layout pensado para 1920x1080. Sem CSS Grid nem `gap` em flex,
+   para funcionar também no Chromium antigo das TVs webOS 3.x/4.x. */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: #0d0f14;
+  color: #e9ecf2;
+  font-family: "LG Smart UI", "Museo Sans", Arial, Helvetica, sans-serif;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+/* ---------- Topo: relógio ---------- */
+.topbar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 200px;
+  padding: 56px 96px 0;
+  display: -webkit-flex; display: flex;
+  -webkit-justify-content: space-between; justify-content: space-between;
+  -webkit-align-items: flex-start; align-items: flex-start;
+}
+.time { font-size: 96px; font-weight: 300; line-height: 1; letter-spacing: -2px; }
+.date { margin-top: 10px; font-size: 32px; color: #8b93a7; }
+.status { font-size: 26px; color: #8b93a7; padding-top: 16px; max-width: 900px; text-align: right; }
+
+/* ---------- Grade ---------- */
+.scroller {
+  position: absolute;
+  top: 210px; bottom: 90px; left: 0; right: 0;
+  overflow: hidden;            /* rolagem feita via JS (scrollTop) */
+  padding: 20px 76px 40px;
+}
+.grid {
+  display: -webkit-flex; display: flex;
+  -webkit-flex-wrap: wrap; flex-wrap: wrap;
+}
+
+.tile {
+  width: 280px;
+  height: 220px;
+  margin: 20px;
+  border-radius: 20px;
+  background: #1a1e28;
+  position: relative;
+  overflow: hidden;
+  -webkit-transition: -webkit-transform .12s ease-out, box-shadow .12s ease-out;
+  transition: transform .12s ease-out, box-shadow .12s ease-out;
+}
+.tile .art {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 64px;
+  display: -webkit-flex; display: flex;
+  -webkit-align-items: center; align-items: center;
+  -webkit-justify-content: center; justify-content: center;
+}
+.tile .art img { width: 120px; height: 100px; object-fit: contain; }
+.tile .letter { font-size: 72px; font-weight: 600; color: rgba(255,255,255,.92); }
+.tile .label {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 64px;
+  line-height: 64px;
+  padding: 0 18px;
+  font-size: 26px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: rgba(0,0,0,.35);
+}
+
+.tile.focused {
+  -webkit-transform: scale(1.08); transform: scale(1.08);
+  box-shadow: 0 0 0 6px #ffffff, 0 18px 40px rgba(0,0,0,.6);
+  z-index: 2;
+}
+
+.empty { font-size: 32px; color: #8b93a7; padding: 40px 20px; }
+
+/* ---------- Rodapé ---------- */
+.hints {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 90px;
+  padding: 0 96px;
+  line-height: 90px;
+  font-size: 24px;
+  color: #6c7489;
+}
+.hints span { margin-right: 48px; }
+.hints b { color: #c9cfdb; }
+.hints .k-red { color: #e5484d; }
+.hints .k-green { color: #46a758; }

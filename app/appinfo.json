@@ -1,0 +1,14 @@
+{
+  "id": "com.lgdetox.menu",
+  "version": "1.0.0",
+  "vendor": "lgdetox",
+  "type": "web",
+  "main": "index.html",
+  "title": "Menu",
+  "icon": "icon.png",
+  "largeIcon": "largeIcon.png",
+  "resolution": "1920x1080",
+  "bgColor": "#0d0f14",
+  "disableBackHistoryAPI": true,
+  "requiredACG": ["application.launcher", "application.query"]
+}

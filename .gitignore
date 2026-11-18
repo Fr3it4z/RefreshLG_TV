@@ -1,0 +1,21 @@
+# Pacotes gerados pelo ares-package (recriam-se com scripts\deploy.bat)
+dist/
+*.ipk
+
+# Dependências do Node, caso se instale algo localmente
+node_modules/
+
+# Chaves e configurações do televisor (nunca devem ir para o repositório)
+*_webos
+*.pem
+.webos/
+novacom-devices.json
+
+# Ficheiros do sistema e de editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*~
